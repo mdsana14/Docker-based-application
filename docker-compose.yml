@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: gamehub_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ace123
+      MYSQL_DATABASE: gaming_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: gamehub_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ace123
+      DB_NAME: gaming_db
+      DB_PORT: 3306
+    ports:
+      - "5000:5000"
+    command: >
+      sh -c "sleep 10 && node server.js"
+
+volumes:
+  db_data:

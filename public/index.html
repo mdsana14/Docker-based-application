@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 GameHub Registration</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <h1>🎮 GameHub Registration</h1>
+    <form id="registrationForm">
+      <input type="text" name="playerName" placeholder="Player Name" required />
+      <input type="email" name="email" placeholder="Email Address" required />
+      <input type="text" name="gameName" placeholder="Game Name" required />
+      <input type="text" name="teamName" placeholder="Team Name" required />
+      <input type="number" name="teamSize" placeholder="Team Size" required />
+      <input type="tel" name="contact" placeholder="Contact Number" required />
+      <select name="gender" required>
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
+    <p id="responseMessage"></p>
+  </div>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target));
+
+      try {
+        const response = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const message = await response.text();
+        document.getElementById("responseMessage").innerText = message;
+      } catch (error) {
+        document.getElementById("responseMessage").innerText = "⚠️ Something went wrong!";
+      }
+    });
+  </script>
+</body>
+</html>
